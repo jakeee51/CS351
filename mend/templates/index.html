@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Friends_Site</title>
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/styles.css') }}">
+<!-- Custom Imports -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.ico') }}">
+</head>
+
+<body class="gradient">
+    <h1 class="text-center"><strong>Welcome to SFS!</strong></h1>
+    <section>
+        <div style="text-align: center;">
+            <form class="login" action="{{ url_for('login') }}" method="post">
+                <p>What's Your Name?</p><input class="form-control center" type="text" id="user" maxlength="64" style="color: black;" name="user">
+                <p>Why should you use my website?</p><span><strong>Because I'm...</strong></span><input class="form-control center" type="password" id="pass" style="color: black;" name="pass"><button class="btn btn-primary" type="submit" style="margin-top: 15px;">Log In!</button></form>
+        </div>
+    </section>
+    <script src="{{ url_for('static',filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
+</body>
+
+</html>
