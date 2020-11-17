@@ -4,7 +4,7 @@
 
 echo "Post Request Testing...\n";
 #Change url to change who you send post request to
-$url = "http://localhost:5000/season/01/episode/01";
+$url = "http://localhost:5000";
 
 #Send Post Requests
 $ch = curl_init($url);
