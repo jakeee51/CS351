@@ -4,13 +4,13 @@
 
 echo "Post Request Testing...\n";
 #Change url to change who you send post request to
-$url = "http://localhost:5000";
+$url = "http://localhost:5000/register";
 
 #Send Post Requests
 $ch = curl_init($url);
 
 function post_TEST($ch) {
-	$post = "w=3&arith=\+&num1=101&num2=010";
+	$post = "user=abc321&pass=abc321";
 	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

@@ -1,9 +1,13 @@
 from config import Config
 import sqlite3 as sql
 import smtplib, urllib, json, time, re, os
+from random import choices
+import hashlib
 
 if Config.RUN_MODE == "dev":
     print(">>>", os.path.basename(__file__))
+
+alphanum = "abcdefghijklmnopqrstuvwxyz0123456789"
 
 def send_post(route, data={}):
     url = Config.DOMAIN + '/' + str(route.strip('/'))
@@ -19,3 +23,10 @@ def sqlite_query(query, args=(), one=False) -> list: # Returns a list of diction
    rv = [dict((cur.description[idx][0], value) for idx, value in enumerate(row)) for row in cur.fetchall()]
    db.close()
    return (rv[0] if rv else None) if one else rv
+
+def make_salt() -> str:
+    salt = ""
+    random_chars = choices(alphanum, k = 4)
+    for char in random_chars:
+        salt += char
+    return ''.join(random_chars)

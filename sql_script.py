@@ -74,7 +74,7 @@ def populate_orgs():
 ##query = "CREATE TABLE Users(id INTEGER PRIMARY KEY AUTOINCREMENT,"\
 ##        "user VARCHAR(32) UNIQUE NOT NULL,"\
 ##        "password VARCHAR(128) NOT NULL,"\
-##        "email VARCHAR(64) NOT NULL)"
+##        "salt VARCHAR(4) NOT NULL)"
 ##conn.execute(query)
 ##query = "CREATE TABLE Friends(user VARCHAR(32) NOT NULL PRIMARY KEY,"\
 ##        "friends TEXT NOT NULL)"
@@ -85,10 +85,8 @@ def populate_orgs():
 
 '''INSERT'''
 ##populate_orgs()
-##query = "INSERT INTO Friends VALUES(?,?,?,?,?,?)"
-##sqlite_query(query, ("0101", "01", "01", "The First One", "Blah Blah Blah"))
-##query = "INSERT INTO Friends VALUES(?,?,?,?,?,?)"
-##sqlite_query(query, ("1019", "10", "19", "The Last One, Part 1 & 2", "N/A", "05/06/2004"))
+##query = "INSERT INTO Users(user,password,salt) VALUES(?,?,?)"
+##sqlite_query(query, ("abc123", "secret", "salt"))
 
 '''UPDATE'''
 ##query = "UPDATE Users SET episode_name='The Last One, Part 2' WHERE id='1018'"
@@ -96,7 +94,7 @@ def populate_orgs():
 ##print("Record updated!")
 
 '''DELETE'''
-##sqlite_query("DELETE FROM Users WHERE id=?", ('1019',))
+##sqlite_query("DELETE FROM Users WHERE id=?", ('1',))
 ##print("Record deleted!")
 
 '''DROP'''
@@ -104,7 +102,7 @@ def populate_orgs():
 ##print("Table deleted!")
 
 '''SELECT'''
-##show_data("Friends")
+show_data("Users")
 
 '''SHOW COLUMNS'''
 ##for column in show_columns('Users'):

@@ -4,28 +4,64 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Friends_Site</title>
-    <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css') }}">
+    <title>Mend App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/css/swiper.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='assets/css/styles.css') }}">
 <!-- Custom Imports -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
     <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.ico') }}">
 </head>
 
 <body class="gradient">
-    <h1 class="text-center"><strong>Welcome to SFS!</strong></h1>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#logi").click(function(){
+				console.log("Hello world!");
+				$.post("{{ url_for('login') }}",
+				{
+					user: document.getElementById("user").value,
+					pass: document.getElementById("pass").value
+				},
+				function(data, status){
+					if(data == '0') {
+						window.location.href="/home";
+					} else {
+						alert("Failed to log in!");
+					}
+				});
+			});
+			$("#regi").click(function(){
+				$.post("{{ url_for('register') }}",
+				{
+					user: document.getElementById("user").value,
+					pass: document.getElementById("pass").value
+				},
+				function(data, status){
+					if(data == '0') {
+						window.location.href="/home";
+					} else {
+						alert("Failed to register! User already exists!");
+					}
+				});
+			});
+		});
+	</script>
+    <h1 class="text-center"><strong>Welcome to Mend!</strong></h1>
+    <h3 class="text-center">An End to End Secure Messaging System!</h3>
     <section>
         <div style="text-align: center;">
-            <form class="login" action="{{ url_for('login') }}" method="post">
-                <p>What's Your Name?</p><input class="form-control center" type="text" id="user" maxlength="64" style="color: black;" name="user">
-                <p>Why should you use my website?</p><span><strong>Because I'm...</strong></span><input class="form-control center" type="password" id="pass" style="color: black;" name="pass"><button class="btn btn-primary" type="submit" style="margin-top: 15px;">Log In!</button></form>
+            <p>Username:</p><input class="form-control center" type="text" id="user" maxlength="64" style="color: black;" name="user">
+            <p>Password:</p><span><input class="form-control center" type="password" id="pass" style="color: black;" name="pass"><br>
+            <button id="logi" class="btn btn-primary">Log In!</button>
+			<button id="regi" class="btn btn-primary">Register!</button>
         </div>
     </section>
-    <script src="{{ url_for('static',filename='assets/js/jquery.min.js') }}"></script>
-    <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
 </body>
 
 </html>
