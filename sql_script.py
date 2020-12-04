@@ -108,5 +108,4 @@ show_data("Users")
 ##for column in show_columns('Users'):
 ##   print(column)
 
-
 conn.close()
