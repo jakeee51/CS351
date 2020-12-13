@@ -78,7 +78,7 @@ def create(): # Create new chat channel
                         next_channel = int(channel) + 1
                         f.write(str(next_channel))
                     with open(f"mend/chat_logs/{channel}.txt", 'w') as f:
-                        f.write("Beginning Of Chat")
+                        f.write("Beginning Of Chat\n")
                     query = "INSERT INTO Messages(channel,from_user,to_user) VALUES(?,?,?)"
                     sqlite_query(query, (channel, user, to_user))
                     return channel
@@ -92,9 +92,7 @@ def get_channel(): # Retrieve channel ID
         user = session["username"]
         to_user = request.form["user"]
         query = "SELECT channel FROM Messages WHERE from_user=? AND to_user=?"
-        print(query, user, to_user)
         results = sqlite_query(query, (user, to_user), one=True)
-        print(results, "HERE")
         return results["channel"]
     return '-1'
 
@@ -103,7 +101,7 @@ def channel(channel_id):
     if request.referrer != None:
         file_path = f"mend/chat_logs/{channel_id}.txt"
         user = session["username"]
-        query = "SELECT from_user,to_user,log FROM Messages WHERE channel=?"
+        query = "SELECT from_user,to_user FROM Messages WHERE channel=?"
         results = sqlite_query(query, (channel_id,))
         for row in results:
             if row["from_user"] == user or row["to_user"] == user:
@@ -117,6 +115,8 @@ def channel(channel_id):
 def send(): # Send message and add to database log
     if request.referrer != None:
         msg = request.form["msg"]
+        channel = request.form["channel"]
+        file_path = f"mend/chat_logs/{channel}.txt"
         update_chat(file_path, msg)
         return '0'
     return '-1'

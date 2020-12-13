@@ -104,7 +104,5 @@ show_data("Messages")
 '''SHOW COLUMNS'''
 ##for column in show_columns('Users'):
 ##   print(column)
-query = "SELECT channel FROM Messages WHERE from_user=? AND to_user=?"
-results = sqlite_query(query, ("abc123", "abc321"), one=True)
-print(results, "HERE")
+
 conn.close()

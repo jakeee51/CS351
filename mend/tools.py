@@ -39,6 +39,6 @@ def get_chat(file):
     ret = []
     with open(file) as f:
         for msg in f.readlines():
-            msg = msg.replace('\n', "<br>")
+            msg = msg.strip('\n')
             ret.append(msg)
     return ret

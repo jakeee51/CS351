@@ -24,15 +24,19 @@
 			});
 			$("#send").click(function() {
 				var channel_id = "{{ channel }}";
-				$.post("{{ url_for('send') }}",
-				{
-					msg: document.getElementById("chat").value,
-					channel: channel_id
-				},
-				function(data){
-					var chat = document.getElementById("log");
-					chat.innerHTML = chat.value + "<br>" + "HELLO";
-				});
+				var sent_msg = document.getElementById("chat").value;
+				if (sent_msg != ''){
+					$.post("{{ url_for('send') }}",
+					{
+						msg: sent_msg,
+						channel: channel_id
+					},
+					function(data){
+						var log = document.getElementById("log");
+						document.getElementById("chat").value = '';
+						log.innerHTML = log.innerHTML + sent_msg + "<br>";
+					});
+				}
 			});
 		});
 	</script>
@@ -44,11 +48,11 @@
     <div class="container">
   		<br><div id="log" style="height:500px; width:auto; border:1px solid; font:16px/26px Georgia, Garamond, Serif; overflow:auto;">
 			{% for msg in log %}
-			    <p>{{ msg }}</p>
+			    {{ msg }}<br>
 			{% endfor %}
   		</div></br>
 	</div>
-    <input id="chat" class="center" style="height:16;width:250px;" type="text" style="color: black;" name="txt"><button id="send" class="btn btn-primary center" onclick="send_msg();">Send</button>
+    <input id="chat" class="center" style="height:16;width:250px;" type="text" style="color: black;" name="txt"><button id="send" class="btn btn-primary center">Send</button>
 </body>
 
 </html>

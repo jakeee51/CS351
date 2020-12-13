@@ -57,7 +57,7 @@
 		    <div class="col-sm-6" style="background-color:black;">
 			      <h3>Your Messages</h3><br>
 			      {% for dm in dms %}
-			      <br><button id="user_dm" class="btn btn-primary dm">{{ dm }}</button></br>
+			      <br><button id="user_dm" value="{{ dm }}" class="btn btn-primary dm">{{ dm }}</button></br>
 			      {% endfor %}
 		    </div>
 		    <div class="col-sm-6" style="background-color:gray;">
