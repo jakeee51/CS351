@@ -30,3 +30,15 @@ def make_salt() -> str:
     for char in random_chars:
         salt += char
     return ''.join(random_chars)
+
+def update_chat(file, sent_msg):
+    with open(file, 'a') as f:
+        f.write(sent_msg + '\n')
+
+def get_chat(file):
+    ret = []
+    with open(file) as f:
+        for msg in f.readlines():
+            msg = msg.replace('\n', "<br>")
+            ret.append(msg)
+    return ret

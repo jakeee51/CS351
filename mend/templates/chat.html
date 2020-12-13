@@ -15,34 +15,23 @@
 </head>
 
 <body class="gradient">
-	<script type="text/javascript">
+	<script>
 		$(document).ready(function(){
-			$(".ndm").click(function(){
-				$.post("{{ url_for('create') }}",
-				{
-					user: document.getElementById("user").value
-				},
-				function(data){
-					if(data != '-1' && data != '0'){
-						window.location.href="/channel/" + data;
-					} else if (data == '0'){
-						alert("Username already added!");
-					} else {
-						alert("Username cannot be added!");
-					}
-				});
+			$("#chat").keypress(function(event) {
+				if (event.keyCode === 13) {
+					$("#send").click();
+				}
 			});
-			$(".dm").click(function(){
-				$.post("{{ url_for('get_channel') }}",
+			$("#send").click(function() {
+				var channel_id = "{{ channel }}";
+				$.post("{{ url_for('send') }}",
 				{
-					user: document.getElementById("user_dm").value
+					msg: document.getElementById("chat").value,
+					channel: channel_id
 				},
 				function(data){
-					if(data != '-1') {
-						window.location.href="/channel/" + data;
-					} else {
-						alert("Chat not found!");
-					}
+					var chat = document.getElementById("log");
+					chat.innerHTML = chat.value + "<br>" + "HELLO";
 				});
 			});
 		});
@@ -53,21 +42,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
 
     <div class="container">
-	  	<div class="row">
-		    <div class="col-sm-6" style="background-color:black;">
-			      <h3>Your Messages</h3><br>
-			      {% for dm in dms %}
-			      <br><button id="user_dm" class="btn btn-primary dm">{{ dm }}</button></br>
-			      {% endfor %}
-		    </div>
-		    <div class="col-sm-6" style="background-color:gray;">
-			      <h3>New Message</h3><br>
-			      <p>Enter a username:</p>
-			      <input id="user" class="form-control center" type="text" maxlength="32" style="color: black;" name="user">
-			      <button class="btn btn-primary center ndm">Create Chat</button>
-		    </div>
-		</div>
+  		<br><div id="log" style="height:500px; width:auto; border:1px solid; font:16px/26px Georgia, Garamond, Serif; overflow:auto;">
+			{% for msg in log %}
+			    <p>{{ msg }}</p>
+			{% endfor %}
+  		</div></br>
 	</div>
+    <input id="chat" class="center" style="height:16;width:250px;" type="text" style="color: black;" name="txt"><button id="send" class="btn btn-primary center" onclick="send_msg();">Send</button>
 </body>
 
 </html>

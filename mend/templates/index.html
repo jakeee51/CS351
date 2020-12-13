@@ -22,7 +22,6 @@
 	<script type="text/javascript">
 		$(document).ready(function(){
 			$("#logi").click(function(){
-				console.log("Hello world!");
 				$.post("{{ url_for('login') }}",
 				{
 					user: document.getElementById("user").value,

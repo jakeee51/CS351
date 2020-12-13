@@ -76,17 +76,14 @@ def populate_orgs():
 ##        "password VARCHAR(128) NOT NULL,"\
 ##        "salt VARCHAR(4) NOT NULL)"
 ##conn.execute(query)
-##query = "CREATE TABLE Friends(user VARCHAR(32) NOT NULL PRIMARY KEY,"\
-##        "friends TEXT NOT NULL)"
-##conn.execute(query)
 ##query = "CREATE TABLE Messages(channel VARCHAR(8) NOT NULL,"\
-##        "user VARCHAR(32) NOT NULL, log TEXT NULL)"
+##        "from_user VARCHAR(32) NOT NULL, to_user VARCHAR(32) NOT NULL)"
 ##conn.execute(query)
 
 '''INSERT'''
 ##populate_orgs()
-##query = "INSERT INTO Users(user,password,salt) VALUES(?,?,?)"
-##sqlite_query(query, ("abc123", "secret", "salt"))
+##query = "INSERT INTO Messages(channel,from_user,to_user) VALUES(?,?,?)"
+##sqlite_query(query, ("123", "abc123", "def123"))
 
 '''UPDATE'''
 ##query = "UPDATE Users SET episode_name='The Last One, Part 2' WHERE id='1018'"
@@ -94,18 +91,20 @@ def populate_orgs():
 ##print("Record updated!")
 
 '''DELETE'''
-##sqlite_query("DELETE FROM Users WHERE id=?", ('1',))
+##sqlite_query("DELETE FROM Messages WHERE to_user=?", ('abc123',))
 ##print("Record deleted!")
 
 '''DROP'''
-##sqlite_query("DROP TABLE Users")
+##sqlite_query("DROP TABLE Messages")
 ##print("Table deleted!")
 
 '''SELECT'''
-show_data("Users")
+show_data("Messages")
 
 '''SHOW COLUMNS'''
 ##for column in show_columns('Users'):
 ##   print(column)
-
+query = "SELECT channel FROM Messages WHERE from_user=? AND to_user=?"
+results = sqlite_query(query, ("abc123", "abc321"), one=True)
+print(results, "HERE")
 conn.close()

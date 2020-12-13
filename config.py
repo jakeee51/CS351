@@ -2,7 +2,7 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
-    SECRET_KEY = ""
+    SECRET_KEY = os.environ.get("SECRET_KEY", "abc")
     DATABASE_URI = os.environ.get("DATABASE_URL", os.path.join(basedir, "database/database.db"))
     ADMINS = []
     DEBUG = False if int(os.environ.get("FLASK_DEBUG", 0)) == 0 else True
