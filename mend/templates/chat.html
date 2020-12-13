@@ -16,6 +16,10 @@
 
 <body class="gradient">
 	<script>
+		function scrollDown() {
+			var elem = document.getElementById('log');
+			elem.scrollTop = elem.scrollHeight + 5000;
+		}
 		$(document).ready(function(){
 			$("#chat").keypress(function(event) {
 				if (event.keyCode === 13) {
@@ -32,6 +36,7 @@
 						channel: channel_id
 					},
 					function(data){
+						scrollDown();
 						var log = document.getElementById("log");
 						document.getElementById("chat").value = '';
 						log.innerHTML = log.innerHTML + sent_msg + "<br>";
@@ -46,11 +51,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
 
     <div class="container">
-  		<br><div id="log" style="height:500px; width:auto; border:1px solid; font:16px/26px Georgia, Garamond, Serif; overflow:auto;">
+  		<div id="log" onload="scrollDown()" style="height:500px; width:auto; border:1px solid; font:16px/26px Georgia, Garamond, Serif; overflow:auto;">
 			{% for msg in log %}
 			    {{ msg }}<br>
 			{% endfor %}
-  		</div></br>
+  		</div><br>
 	</div>
     <input id="chat" class="center" style="height:16;width:250px;" type="text" style="color: black;" name="txt"><button id="send" class="btn btn-primary center">Send</button>
 </body>

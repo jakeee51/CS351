@@ -27,8 +27,7 @@ def login():
             if row["user"] == user and row["password"] == hash_pass:
                 session["username"] = user
                 return '0'
-            else:
-                return '-1'
+        return '-1'
     return render_template("index.html")
 
 @app.route("/register", methods=["GET", "POST"])    

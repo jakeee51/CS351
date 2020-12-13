@@ -86,20 +86,20 @@ def populate_orgs():
 ##sqlite_query(query, ("123", "abc123", "def123"))
 
 '''UPDATE'''
-##query = "UPDATE Users SET episode_name='The Last One, Part 2' WHERE id='1018'"
+##query = "UPDATE Messages SET channel='10000000'"
 ##conn.execute(query)
 ##print("Record updated!")
 
 '''DELETE'''
-##sqlite_query("DELETE FROM Messages WHERE to_user=?", ('abc123',))
+##sqlite_query("DELETE FROM Users WHERE user=?", ('abc321',))
 ##print("Record deleted!")
 
 '''DROP'''
-##sqlite_query("DROP TABLE Messages")
+##sqlite_query("DROP TABLE Users")
 ##print("Table deleted!")
 
 '''SELECT'''
-show_data("Messages")
+show_data("Users")
 
 '''SHOW COLUMNS'''
 ##for column in show_columns('Users'):
