@@ -99,7 +99,7 @@ def populate_orgs():
 ##print("Table deleted!")
 
 '''SELECT'''
-show_data("Messages")
+show_data("Users")
 
 '''SHOW COLUMNS'''
 ##for column in show_columns('Users'):
