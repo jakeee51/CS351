@@ -86,7 +86,7 @@ def create(): # Create new chat channel
                         next_channel = int(channel) + 1
                         f.write(str(next_channel))
                     with open(f"mend/chat_logs/{channel}.txt", 'w') as f:
-                        f.write("Beginning Of Chat\n")
+                        f.write("Secure Channel Created\n")
                     query = "INSERT INTO Messages(channel,from_user,to_user) VALUES(?,?,?)"
                     sqlite_query(query, (channel, user, to_user))
                     return channel
@@ -138,7 +138,6 @@ def update():
                 if user != msg_line[0].strip(':'):
                     return json.dumps(msg_line)
     return '-1'
-
 
 @app.route("/send", methods=["POST"])
 def send(): # Send message and add to database log

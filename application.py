@@ -1,6 +1,6 @@
 from mend import application
 
-# Version - 0.1.5
+# Version - 1.0.0
 # Date - 12/13/20
 
 def start_ngrok():
