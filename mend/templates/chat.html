@@ -38,7 +38,7 @@
 			return encrpyted.cipher;
 		}
 		function decrypt(cipher_text) {
-			var Bits = 1024; var pass = getCookie("pass");
+			var Bits = 1024; var pass = getCookie("pass"); // Random secret per channel session
 			var RSAkey = cryptico.generateRSAKey(pass, Bits);
 			var plain_text = cryptico.decrypt(cipher_text, RSAkey).plaintext;
 			return plain_text;
