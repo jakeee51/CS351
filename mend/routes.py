@@ -11,6 +11,7 @@ if Config.RUN_MODE == "dev":
 @app.route('/logout', methods=["GET"])
 def logout(): # Logout Handler
     session.pop("username", None)
+    session.pop("cur_len", None)
     resp = make_response(redirect(url_for("login")))
     return resp
 
@@ -20,8 +21,12 @@ def login():
     if request.method == "POST":
         user = request.form["user"]
         pas = request.form["pass"]
+        pub_key = request.form["pub_key"]
         query = "SELECT user,password,salt FROM Users"
         users = sqlite_query(query)
+        edit_file("mend/public_keys.txt", user)
+        with open("mend/public_keys.txt", 'a') as f:
+            f.write(f"{user} {pub_key}\n")
         for row in users:
             hash_pass = hashlib.sha256((pas + row["salt"]).encode()).hexdigest()
             if row["user"] == user and row["password"] == hash_pass:
@@ -35,12 +40,16 @@ def register():
     if request.method == "POST":
         user = request.form["user"]
         pas = request.form["pass"]
+        pub_key = request.form["pub_key"]
         salt = make_salt()
         hash_pass = hashlib.sha256((pas + salt).encode()).hexdigest()
         try:
             query = "INSERT INTO Users(user,password,salt) VALUES(?,?,?)"
             sqlite_query(query, (user,hash_pass,salt))
             session["username"] = user
+            edit_file("mend/public_keys.txt", user)
+            with open("mend/public_keys.txt", 'a') as f:
+                f.write(f"{user} {pub_key}\n")
             return '0'
         except sql.IntegrityError:
             return '-1'
@@ -103,21 +112,47 @@ def channel(channel_id):
         query = "SELECT from_user,to_user FROM Messages WHERE channel=?"
         results = sqlite_query(query, (channel_id,))
         for row in results:
-            if row["from_user"] == user or row["to_user"] == user:
+            if row["from_user"] == user:
                 chat_log = get_chat(file_path)
+                pub_key = get_public_key(row["to_user"])
+                session["cur_len"] = len(chat_log)
                 return render_template("chat.html",
+                                       user = user,
+                                       pub_key = pub_key,
                                        channel = channel_id,
                                        log = chat_log)
     return "404 - Page Not Found!"
 
+@app.route("/update", methods=["POST"])
+def update():
+    if request.referrer != None:
+        channel_id = request.form["channel"]
+        user = session["username"]
+        current_length = int(session["cur_len"])
+        with open(f"mend/chat_logs/{channel_id}.txt", 'r') as f:
+            logs = f.readlines()
+            if len(logs) > int(current_length):
+                session["cur_len"] = current_length + 1
+                new_msg = logs[-1].strip('\n')
+                msg_line = new_msg.split(' ')
+                if user != msg_line[0].strip(':'):
+                    return json.dumps(msg_line)
+    return '-1'
+
+
 @app.route("/send", methods=["POST"])
 def send(): # Send message and add to database log
     if request.referrer != None:
+        user = session["username"]
         msg = request.form["msg"]
-        channel = request.form["channel"]
-        file_path = f"mend/chat_logs/{channel}.txt"
-        update_chat(file_path, msg)
-        return '0'
+        channel_id = request.form["channel"]
+        query = "SELECT from_user FROM Messages WHERE channel=?"
+        results = sqlite_query(query, (channel_id,))
+        for row in results:
+            if row["from_user"] == user:
+                file_path = f"mend/chat_logs/{channel_id}.txt"
+                update_chat(file_path, msg, row["from_user"])
+                return '0'
     return '-1'
 
 @app.route("/index", methods=["GET", "POST"])

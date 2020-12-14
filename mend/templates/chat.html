@@ -11,16 +11,59 @@
 <!-- Custom Imports -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="{{ url_for('static',filename='assets/js/cryptico.min.js') }}"></script>
     <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.ico') }}">
 </head>
 
 <body class="gradient">
 	<script>
+		function getCookie(cname) {
+			var name = cname + "=";
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return '';
+		}
+		function encrpyt(plain_text) {
+			var PublicKey = "{{ pub_key }}";
+			var encrpyted = cryptico.encrypt(plain_text, PublicKey);
+			return encrpyted.cipher;
+		}
+		function decrypt(cipher_text) {
+			var Bits = 1024; var pass = getCookie("pass");
+			var RSAkey = cryptico.generateRSAKey(pass, Bits);
+			var plain_text = cryptico.decrypt(cipher_text, RSAkey).plaintext;
+			return plain_text;
+		}
+		function fetchdata(){
+			$.post("{{ url_for('update') }}",
+			{
+				channel: "{{ channel }}"
+			},
+			function(data){
+				if (data != '-1'){
+					var msg_line = JSON.parse(data);
+					var log = document.getElementById("log");
+					var plain_text = decrypt(msg_line[1]);
+					log.innerHTML = log.innerHTML + msg_line[0] + ' ' + plain_text + "<br>";
+				}
+			});
+		}
 		function scrollDown() {
 			var elem = document.getElementById('log');
 			elem.scrollTop = elem.scrollHeight + 5000;
 		}
+
 		$(document).ready(function(){
+			setInterval(fetchdata,5000);
 			$("#chat").keypress(function(event) {
 				if (event.keyCode === 13) {
 					$("#send").click();
@@ -28,8 +71,9 @@
 			});
 			$("#send").click(function() {
 				var channel_id = "{{ channel }}";
-				var sent_msg = document.getElementById("chat").value;
-				if (sent_msg != ''){
+				var plain_text = document.getElementById("chat").value;
+				var sent_msg = encrpyt(plain_text);
+				if (plain_text != ''){
 					$.post("{{ url_for('send') }}",
 					{
 						msg: sent_msg,
@@ -39,7 +83,7 @@
 						scrollDown();
 						var log = document.getElementById("log");
 						document.getElementById("chat").value = '';
-						log.innerHTML = log.innerHTML + sent_msg + "<br>";
+						log.innerHTML = log.innerHTML + "{{ user }}: " + plain_text + "<br>";
 					});
 				}
 			});
@@ -55,9 +99,9 @@
 			{% for msg in log %}
 			    {{ msg }}<br>
 			{% endfor %}
-  		</div><br>
+  		</div>
 	</div>
-    <input id="chat" class="center" style="height:16;width:250px;" type="text" style="color: black;" name="txt"><button id="send" class="btn btn-primary center">Send</button>
+    <br><input id="chat" class="center" style="height:16;width:250px;" type="text" style="color: black;" name="txt"><button id="send" class="btn btn-primary center">Send</button>
 </body>
 
 </html>

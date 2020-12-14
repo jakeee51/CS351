@@ -15,17 +15,30 @@
     <script src="{{ url_for('static',filename='assets/js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static',filename='assets/bootstrap/js/bootstrap.min.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.3.1/js/swiper.jquery.min.js"></script>
+    <script src="{{ url_for('static',filename='assets/js/cryptico.min.js') }}"></script>
     <link rel="icon" href="{{ url_for('static',filename='assets/img/favicon.ico') }}">
 </head>
 
 <body class="gradient">
 	<script type="text/javascript">
+		function gen_keys() {
+			// Encrypt with the public key...
+			var PassPhrase = document.getElementById("user").value;
+			// The length of the RSA key, in bits.
+			var Bits = 1024; 
+			var RSAkey = cryptico.generateRSAKey(PassPhrase, Bits);
+			var PublicKey = cryptico.publicKeyString(RSAkey);
+			document.cookie = "pass=" + PassPhrase;   
+			return PublicKey;
+		}
 		$(document).ready(function(){
 			$("#logi").click(function(){
+				var key = gen_keys();
 				$.post("{{ url_for('login') }}",
 				{
 					user: document.getElementById("user").value,
-					pass: document.getElementById("pass").value
+					pass: document.getElementById("pass").value,
+					pub_key: key
 				},
 				function(data, status){
 					if(data == '0') {
@@ -36,10 +49,12 @@
 				});
 			});
 			$("#regi").click(function(){
+				var key = gen_keys();
 				$.post("{{ url_for('register') }}",
 				{
 					user: document.getElementById("user").value,
-					pass: document.getElementById("pass").value
+					pass: document.getElementById("pass").value,
+					pub_key: key
 				},
 				function(data, status){
 					if(data == '0') {
